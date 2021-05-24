@@ -5,10 +5,14 @@ import com.ignite.models.SportClub;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.Ignition;
+import org.apache.ignite.cache.query.QueryCursor;
+import org.apache.ignite.cache.query.ScanQuery;
+import org.apache.ignite.lang.IgniteBiPredicate;
 
 import javax.cache.Cache;
 import java.io.IOException;
-import java.util.*;
+import java.util.Scanner;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class Main {
@@ -43,10 +47,10 @@ public class Main {
                         break;
                     case 7:
                         calculateAveragePlayerSalaryClient(playersMap);
-                        break;
+                        break;*/
                     case 8:
                         getElementByName(playersMap, clubsMap);
-                        break;*/
+                        break;
                 }
                 System.out.println("Press enter to continue...");
                 System.in.read();
@@ -97,7 +101,7 @@ public class Main {
             }
         } else System.out.println("Wrong number, choose again.");
     }
-/*
+
     private static void getElementByName(IgniteCache<UUID, Player> players, IgniteCache<UUID, SportClub> clubs) throws IOException {
         System.out.println("Getting by name");
         Integer s = printSubMenu();
@@ -107,19 +111,19 @@ public class Main {
             switch (s) {
                 case 1:
                     String playerName = scanner.next();
-                    Predicate predicate = Predicates.equal("firstname", playerName);
-                    Collection<Player> playersCollection = players.values(predicate);
-                    playersCollection.forEach(player -> System.out.println(player.toString()));
+                    ScanQuery<UUID, Player> scan = new ScanQuery<>((IgniteBiPredicate<UUID, Player>) (uuid, c) -> c.getFirstname().equals(playerName));
+                    QueryCursor<Cache.Entry<UUID, Player>> playersCollection = players.query(scan);
+                    playersCollection.forEach(player -> System.out.println(player.getValue()));
                     break;
                 case 2:
                     String clubName = scanner.next();
-                    Predicate clubPredicate = Predicates.equal("name", clubName);
-                    Collection<SportClub> clubsCollection = clubs.values(clubPredicate);
-                    clubsCollection.forEach(player -> System.out.println(player.toString()));
+                    ScanQuery<UUID, SportClub> clubsScan = new ScanQuery<>((IgniteBiPredicate<UUID, SportClub>) (uuid, c) -> c.getName().equals(clubName));
+                    QueryCursor<Cache.Entry<UUID, SportClub>> clubsCollection = clubs.query(clubsScan);
+                    clubsCollection.forEach(player -> System.out.println(player.getValue()));
                     break;
             }
         } else System.out.println("Wrong number, choose again.");
-    }*/
+    }
 
     private static void editElement(IgniteCache<UUID, Player> players, IgniteCache<UUID, SportClub> clubs) {
         System.out.println("Editing");
