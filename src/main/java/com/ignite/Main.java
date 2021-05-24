@@ -11,6 +11,8 @@ import org.apache.ignite.lang.IgniteBiPredicate;
 
 import javax.cache.Cache;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 import java.util.regex.Pattern;
@@ -42,13 +44,10 @@ public class Main {
                     case 5:
                         removeElement(playersMap, clubsMap);
                         break;
-/*                    case 6:
+                    case 6:
                         calculateAveragePlayerSalary(playersMap);
                         break;
                     case 7:
-                        calculateAveragePlayerSalaryClient(playersMap);
-                        break;*/
-                    case 8:
                         getElementByName(playersMap, clubsMap);
                         break;
                 }
@@ -203,20 +202,18 @@ public class Main {
         } else System.out.println("Wrong number, choose again.");
     }
 
-/*    private static void calculateAveragePlayerSalary(IgniteCache<UUID, Player> players) {
+    private static void calculateAveragePlayerSalary(IgniteCache<UUID, Player> players) {
         System.out.println("Calculate average salary");
-        Double averageSalary = players.aggregate(Aggregators.integerAvg("salary"));
-        System.out.println("Average player salary: " + averageSalary);
-    }
-
-    private static void calculateAveragePlayerSalaryClient(IgniteCache<UUID, Player> players) {
-        System.out.println("Calculate average salary");
-        double averageSalary = players.values().stream()
+        List<Player> playersList = new ArrayList<>();
+        for (Cache.Entry<UUID, Player> player : players) {
+            playersList.add(player.getValue());
+        }
+        double averageSalary = playersList.stream()
                 .mapToDouble(Player::getSalary)
                 .average()
                 .orElse(0);
         System.out.println("Average player salary: " + averageSalary);
-    }*/
+    }
 
     private static SportClub getSportClub(Scanner scanner) {
         System.out.println("Write club name:");
@@ -260,8 +257,7 @@ public class Main {
         System.out.println("4.GET ALL");
         System.out.println("5.REMOVE");
         System.out.println("6.CALCULATE AVERAGE PLAYER SALARY");
-        System.out.println("7.CALCULATE AVERAGE PLAYER SALARY BY CLIENT");
-        System.out.println("8.GET BY NAME");
+        System.out.println("7.GET BY NAME");
         Scanner scan = new Scanner(System.in);
         return scan.nextInt();
     }
