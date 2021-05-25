@@ -249,7 +249,7 @@ public class Main {
     }
 
     private static Integer printMenu() {
-        System.out.println("\nSPORTS CLUB - HAZELCAST");
+        System.out.println("\nSPORTS CLUB - IGNITE");
         System.out.println("\nChoose operation:");
         System.out.println("1.ADD");
         System.out.println("2.EDIT");
